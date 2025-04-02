@@ -22,7 +22,7 @@ const Dashboard = () => {
                     }}
                     type="text"
                     className={styles.input}
-                    placeholder="Search by workflow Name/ID..."
+                    placeholder="Search By Workflow Name/ID"
                     name="search"
                     onInput={(e) => setSearchInput(e.target.value)}
                     inputProps={{

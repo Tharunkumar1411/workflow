@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import Logo from "../../assets/Logo.png";
-import OverlayImg from "../../assets/bg-overlay.png";
-import { Typography, useMediaQuery, useTheme } from "@mui/material";
+import Logo from "../../assets/images/Logo.png";
+import OverlayImg from "../../assets/images/bg-overlay.png";
+import { useMediaQuery, useTheme } from "@mui/material";
 import LoginCard from "../../components/LoginCard";
 
 const Login = () => {

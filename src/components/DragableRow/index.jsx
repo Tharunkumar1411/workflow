@@ -7,8 +7,9 @@ import { MoreVert } from "@mui/icons-material";
 import CustomButton from "../CustomButton";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import selectedPin from "../../assets/selectedPin.png";
-import unselectedPin from "../../assets/unselectedPin.png";
+import selectedPin from "../../assets/images/selectedPin.png";
+import unselectedPin from "../../assets/images/unselectedPin.png";
+import { DASHBOARD_ACTION_BTN_STYLE } from "../../helpers/Utils";
 
 const StyledTableRow = styled(TableRow)(() => ({
     cursor: "grab", // Makes rows draggable
@@ -49,11 +50,9 @@ export default function DraggableRow({ row, togglePin,expandedRows, setExpandedR
            {(row.pinned) ? <img src={selectedPin} /> : <img src={unselectedPin} />} 
           </IconButton>
 
-          <CustomButton children="Execute"  sx={{backgroundColor:"#fff", color: "#000", width:"fit-content", height: "32px"}}/>
+          <CustomButton children="Execute" sx={DASHBOARD_ACTION_BTN_STYLE}/>
 
-
-          <CustomButton children="Edit"  sx={{backgroundColor:"#fff", color: "#000", width:"fit-content", height: "32px"}}/>
-
+          <CustomButton children="Edit"  sx={DASHBOARD_ACTION_BTN_STYLE}/>
 
           <IconButton size="small">
             <MoreVert />
