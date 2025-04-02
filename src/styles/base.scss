@@ -1,0 +1,34 @@
+:root {
+	--drawerWidth: 250px;
+}
+
+html, body, div, form, p, ul, li, span, label, img {
+	margin: 0;
+	padding: 0;
+	outline: none;
+    box-sizing: border-box;
+}
+html, body {
+	height: 100%;
+	width: 100%;
+}
+body {
+	position: relative;
+	font-family: -apple-system-font, "Avenir", Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-size-adjust: none;
+	overflow: hidden;
+}
+.app-no-scrollbar ::-webkit-scrollbar {
+	height: 0 !important;
+	width: 0 !important;
+}
+
+.MuiDrawer-paperAnchorDockedLeft {
+	border: none !important;
+}
+
+* {
+	-webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+	tap-highlight-color: rgba(0,0,0,0) !important;
+}

@@ -1,0 +1,25 @@
+
+@font-face {
+    font-family: "ZenBlack";
+    src: local("Avenir Book"), local("sans-serif"),
+      url("assets/fonts/ZenKakuGothicAntique-Black.ttf") format("ttf");
+    font-display: swap;
+    font-weight: normal;
+  }
+
+
+  @font-face {
+    font-family: "ZenRegular";
+    src: local("Avenir Book"), local("sans-serif"),
+      url("assets/fonts/ZenKakuGothicAntique-Regular.ttf") format("ttf");
+    font-display: swap;
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: "ZenBold";
+    src: local("Avenir Book"), local("sans-serif"),
+      url("assets/fonts/ZenKakuGothicAntique-Bold.ttf") format("ttf");
+    font-display: swap;
+    font-weight: normal;
+  }
