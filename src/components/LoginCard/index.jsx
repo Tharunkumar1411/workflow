@@ -7,13 +7,28 @@ import CustomButton from "../CustomButton";
 import GoogleImg from "../../assets/GoogleIcon.svg"
 import AppleImg from "../../assets/AppleIcon.svg"
 import FbImg from "../../assets/FaceBookIcon.svg"
-import { Padding } from "@mui/icons-material";
+import { handleEmailAuth } from "../../helpers/auth";
+import { useNavigate } from "react-router";
+import { PAGES_ROUTES } from "../../AppRoute/routes";
 
 export default function LoginCard () {
-    const handleLogin = () => {};
-    // eslint-disable-next-line no-unused-vars
+     
     const [loading, setLoading] = useState(false);
+    const navigage = useNavigate();
 
+    const handleLogin = async(values) => {
+        setLoading(prev => !prev);
+
+        try {
+            const userDetails = await handleEmailAuth(values.email, values.password, "Login");
+            sessionStorage.setItem("Auth Token", userDetails?.user?.accessToken);
+            navigage(PAGES_ROUTES.DASHBOARD);
+        } catch (error) {
+            console.log("error::", error)
+        } finally {
+            setLoading(prev => !prev)
+        }
+    }
     return(
         <div className={styles.loginContainer}>
             <Typography className={styles.subHeader}>WELCOME BACK!</Typography>
@@ -89,13 +104,21 @@ export default function LoginCard () {
                             </FormControl>
 
                             <FormControl className={styles.flexRow}>
-                                <FormControlLabel control={<Checkbox defaultChecked />} label="Remember Me" />
+                                <FormControlLabel 
+                                    control={
+                                        <Checkbox defaultChecked sx={{
+                                                '&.Mui-checked': {
+                                                    color: "#EE3425",
+                                                },
+                                            }}
+                                        />
+                                    } 
+                                    label="Remember Me" />
                                 <Typography>Forget Password ?</Typography>
                             </FormControl>
 
                             <div className={styles.loginBtn} onClick={!loading ? handleSubmit : null}>
-                                <Typography className={styles.loginTxt}>LOG IN</Typography>
-                                {loading ? <CircularProgress className={styles.circleLoader}/> : null}
+                                {loading ? <CircularProgress className={styles.circleLoader} size="30px"/> : <Typography className={styles.loginTxt}>LOG IN</Typography>}
                             </div>
                         </form>
                     )}

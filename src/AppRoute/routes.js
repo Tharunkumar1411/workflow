@@ -1,3 +1,4 @@
 export const PAGES_ROUTES = {
-    LOGIN: `/`
+    LOGIN: `/`,
+    DASHBOARD: `/dashboard`
 }
