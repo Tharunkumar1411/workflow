@@ -26,7 +26,7 @@ import DraggableRow from "../DragableRow";
 import { StyledTableCell } from "../../helpers/MuiElements";
 import LaunchIcon from '@mui/icons-material/Launch';
 
-function createData(id, name, flowName,flowId, editedOn, description, details) {
+function createData(id, name, flowName, flowId, editedOn, description, details) {
   return { id, name, flowName, flowId, editedOn, description, details, pinned: false };
 }
 
@@ -58,7 +58,7 @@ const initialRows = [
   ]),
 ];
 
-export default function DataTable() {
+export default function DataTable({searchInput}) {
   const [rows, setRows] = React.useState(initialRows);
   const [page, setPage] = React.useState(1);
   const [expandedRows, setExpandedRows] = React.useState({}); // Track expanded rows
@@ -100,6 +100,11 @@ export default function DataTable() {
 
   // Paginate rows
   const paginatedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  React.useEffect(() => {
+    let filter = searchInput ? initialRows.filter((item) => item.flowName.toLowerCase().includes(searchInput.toLowerCase()) || item.flowId.toLowerCase().includes(searchInput.toLowerCase())) : initialRows;
+    setRows(filter)
+  }, [searchInput])
 
   return (
     <TableContainer component={Paper} sx={{ padding: "20px" }}>

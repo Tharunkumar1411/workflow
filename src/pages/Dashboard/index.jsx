@@ -1,11 +1,13 @@
 import { InputAdornment, OutlinedInput, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import CustomButton from "../../components/CustomButton";
 import SearchIcon from '@mui/icons-material/Search';
 import DataTable from "../../components/DataTable";
 
 const Dashboard = () => {
+    const [serchInput, setSearchInput] = useState("");
+
     return(
         <div className={styles.rootContainer}>
             <Typography className={styles.header}>Workflow Builder</Typography>
@@ -22,6 +24,7 @@ const Dashboard = () => {
                     className={styles.input}
                     placeholder="Search by workflow Name/ID..."
                     name="search"
+                    onInput={(e) => setSearchInput(e.target.value)}
                     inputProps={{
                         maxLength: "26",
                     }}
@@ -36,7 +39,7 @@ const Dashboard = () => {
             </div>
             
             <div className={styles.dataContainer}>
-                <DataTable />
+                <DataTable searchInput={serchInput}/>
             </div>
         </div>
     )

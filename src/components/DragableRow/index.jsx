@@ -3,10 +3,12 @@ import { useSortable } from "@dnd-kit/sortable";
 import { Box, IconButton, styled, TableRow } from "@mui/material";
 import React from "react";
 import { StyledTableCell } from "../../helpers/MuiElements";
-import { MoreVert, PushPin } from "@mui/icons-material";
+import { MoreVert } from "@mui/icons-material";
 import CustomButton from "../CustomButton";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import selectedPin from "../../assets/selectedPin.png";
+import unselectedPin from "../../assets/unselectedPin.png";
 
 const StyledTableRow = styled(TableRow)(() => ({
     cursor: "grab", // Makes rows draggable
@@ -44,7 +46,7 @@ export default function DraggableRow({ row, togglePin,expandedRows, setExpandedR
               togglePin(row.id);
             }}
           >
-            <PushPin sx={{ color: row.pinned ? "#F4C430" : "black", fontStyle: "italic" }} />
+           {(row.pinned) ? <img src={selectedPin} /> : <img src={unselectedPin} />} 
           </IconButton>
 
           <CustomButton children="Execute"  sx={{backgroundColor:"#fff", color: "#000", width:"fit-content", height: "32px"}}/>
