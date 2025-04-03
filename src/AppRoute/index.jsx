@@ -5,6 +5,7 @@ import PrivateLayout from "./PrivateLayout";
 
 const AuthPage = lazy(() => import("../pages/Login"));
 const DashboardPage = lazy(() => import("../pages/Dashboard"))
+const WorkFlowPage = lazy(() => import("../pages/WorfkFlow"))
 
 const AppRoute = () => {
     return(
@@ -14,6 +15,7 @@ const AppRoute = () => {
 
                 <Route element={<PrivateLayout />}>
                     <Route path={PAGES_ROUTES.DASHBOARD} element={<DashboardPage />}/>
+                    <Route path={`${PAGES_ROUTES.WORKFLOW}/:id`} element={<WorkFlowPage />}/>
                 </Route>
             </Routes>
         </Suspense>

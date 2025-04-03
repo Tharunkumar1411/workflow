@@ -66,7 +66,7 @@ const Dashboard = () => {
                     }
                 />
 
-                <CustomButton children="+ Create New Process"  sx={{backgroundColor:"#000", color: "#fff", width:"fit-content", height: "32px"}}/>
+                <CustomButton onClick={() => navigate(`${PAGES_ROUTES.WORKFLOW}/123`)} children="+ Create New Process"  sx={{backgroundColor:"#000", color: "#fff", width:"fit-content", height: "32px"}}/>
             </div>
             
             <div className={styles.dataContainer}>

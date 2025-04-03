@@ -1,4 +1,5 @@
 export const PAGES_ROUTES = {
     LOGIN: `/`,
-    DASHBOARD: `/dashboard`
+    DASHBOARD: `/dashboard`,
+    WORKFLOW: `/workflow`
 }
