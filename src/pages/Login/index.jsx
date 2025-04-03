@@ -4,10 +4,13 @@ import Logo from "../../assets/images/Logo.png";
 import OverlayImg from "../../assets/images/bg-overlay.png";
 import { useMediaQuery, useTheme } from "@mui/material";
 import LoginCard from "../../components/LoginCard";
+import useAuthStore from "../../store/Auth";
+import SignupCard from "../../components/SignupCard";
 
 const Login = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const {userIn} = useAuthStore(state => state)
 
     return (
         <div className={styles.rootContainer}>
@@ -28,7 +31,7 @@ const Login = () => {
                 </div>
             }
             
-            <LoginCard />
+            {userIn === "Login" ? <LoginCard /> : <SignupCard />}
         </div>
     );
 };

@@ -2,7 +2,6 @@
 
 .loginContainer{
     width: 460px;
-    height: 768px;
     top: 132px;
     left: 780px;
     background-color: #fff;
@@ -96,6 +95,7 @@
         .span{
             text-decoration: underline;
             font-weight: 700;
+            cursor: pointer;
         }
     }
 }

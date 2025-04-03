@@ -6,8 +6,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AppRoute />
-      <Toaster />
+        <AppRoute />
+        <Toaster />
     </BrowserRouter>
   )
 }

@@ -122,7 +122,7 @@ export default function DataTable({searchInput}) {
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (
-                <>
+                <React.Fragment key={row.id}>
                     <DraggableRow key={row.id} row={row} togglePin={togglePin} expandedRows={expandedRows} setExpandedRows={setExpandedRows}/>
                     <TableRow sx={{ backgroundColor: "#FFF7F0", padding: "10px", borderRadius: "5px" }}>
                         <TableCell colSpan={5} sx={{ padding: 0 }} >
@@ -141,7 +141,7 @@ export default function DataTable({searchInput}) {
                         </Collapse>
                         </TableCell>
                     </TableRow>
-                </>
+                </React.Fragment>
               ))}
             </TableBody>
           </Table>
