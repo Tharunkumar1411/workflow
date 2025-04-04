@@ -1,5 +1,5 @@
 import { InputAdornment, Menu, MenuItem, OutlinedInput, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import CustomButton from "../../components/CustomButton";
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router";
 import { PAGES_ROUTES } from "../../AppRoute/routes";
 import LogoutIcon from '@mui/icons-material/Logout';
 import CustomModal from "../../components/CustomModal";
+import useFlowStore from "../../store/Flow";
 
 const Dashboard = () => {
     const [serchInput, setSearchInput] = useState("");
@@ -16,21 +17,26 @@ const Dashboard = () => {
     const {setAuthDetails} = useAuthStore(state => state);
     const [modalHeader, setModalHeader] = useState({header: "", subHeader: ""});
     const [modal, setModal] = useState(false);
+    const {flows} = useFlowStore(state => state);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("flows", flows)
+    },[flows])
     
-      const handleLogout = () => {
+    const handleLogout = () => {
         setModalHeader({...modalHeader, header: "Are you sure, you want to Logout ?"})
         setModal(true)
-      };
+    };
 
-      const handleOnConfirm = () => {
+    const handleOnConfirm = () => {
         setAuthDetails(null);
         navigate(PAGES_ROUTES.LOGIN);
-      }
+    }
 
-      const handleClose = () => {
+    const handleClose = () => {
         setModal(false);
-      }
+    }
 
     return(
         <div className={styles.rootContainer}>

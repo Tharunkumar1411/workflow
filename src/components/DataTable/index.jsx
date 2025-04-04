@@ -25,6 +25,7 @@ import CustomButton from "../CustomButton";
 import DraggableRow from "../DragableRow";
 import { StyledTableCell } from "../../helpers/MuiElements";
 import LaunchIcon from '@mui/icons-material/Launch';
+import useFlowStore from "../../store/Flow";
 
 function createData(id, name, flowName, flowId, editedOn, description, details) {
   return { id, name, flowName, flowId, editedOn, description, details, pinned: false };
@@ -63,6 +64,7 @@ export default function DataTable({searchInput}) {
   const [page, setPage] = React.useState(1);
   const [expandedRows, setExpandedRows] = React.useState({}); // Track expanded rows
   const rowsPerPage = 10;
+  const {flows} = useFlowStore(state => state);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: 200, tolerance: 5 } }), // Prevents accidental drag on click

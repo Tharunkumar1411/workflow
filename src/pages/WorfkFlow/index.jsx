@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ReactFlow, {
   Background,
   useEdgesState,
@@ -18,8 +18,12 @@ import {
 } from "@mui/icons-material";
 import { CircleNode } from "../../components/CircleNode";
 import { RectNode } from "../../components/RectNode";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CustomButton from "../../components/CustomButton";
+import ConfigPanel from "../../components/ConfigPanel";
+import useFlowStore from "../../store/Flow";
+import { getCustomTimestamp, getRandom3DigitId, notify, notifyError } from "../../helpers/Utils";
+import useAuthStore from "../../store/Auth";
 
 const nodeTypes = {
   circle: CircleNode,
@@ -34,18 +38,44 @@ const WorkFlowInner = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     { id: "e1-2", source: "1", target: "2", animated: true },
   ]);
+  
+  const [selectedNode, setSelectedNode] = useState(null);
 
+  const onSelectNode = (id, data) => {
+    console.log("chekcing thiss", data)
+      setSelectedNode({ id, ...data }); // Store node data in state
+  };
+
+  const { id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentParent, setCurrentParent] = useState(null);
   const [idCounter, setIdCounter] = useState(3);
   const { zoomIn, zoomOut, setViewport, getZoom } = useReactFlow();
   const [zoomLevel, setZoomLevel] = useState(getZoom());
+  const {getFlow, setFlow} = useFlowStore(state => state);
+  const [fileName, setFileName] = useState("Untitled")
   const [history, setHistory] = useState({
     past: [],
     present: { nodes, edges },
     future: [],
   });
+  const {displayName} = useAuthStore(state => state.authDetails)
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      const savedFlow = getFlow(id);
+      if (savedFlow) {
+        setNodes(savedFlow.nodes);
+        setEdges(savedFlow.edges);
+        setHistory({
+          past: [],
+          present: { nodes: savedFlow.nodes, edges: savedFlow.edges },
+          future: [],
+        });
+      }
+    }
+  }, [getFlow, id, setEdges, setNodes]);
 
   // History management functions
   const saveToHistory = useCallback(() => {
@@ -218,19 +248,52 @@ const WorkFlowInner = () => {
     handleClose();
   }
 
-  const handleSave = () => {};
+  const handleSave = () => {
+    if (!id) {
+      notifyError("No flow name specified in URL.");
+      return;
+    }
+    console.log("filename:", fileName)
+    if(fileName === "Untitled" || fileName === "") {
+      notifyError("Give proper File name");
+      return;
+    }
+
+    const editedOn = getCustomTimestamp()
+    const randomId = getRandom3DigitId()
+
+    const flowData = {
+      flowId: randomId,
+      nodes,
+      edges,
+      flowName: fileName,
+      editedOn,
+      name: displayName,
+      description : "Some description here regarding the flow.."
+    };
+  
+    setFlow(id, flowData);
+    notify("Flow saved to store!");
+  };
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "#F7F3E7" }}>
       <ReactFlow
-        nodes={nodes}
+        // nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         fitView
         style={{ background: "#F7F3E7", zIndex: "0" }}
-        onZoom={handleZoomInteraction} // Sync zoom level on user interaction
+        onZoom={handleZoomInteraction}
+        nodes={nodes.map((node) => ({
+          ...node,
+          data: {
+              ...node.data,
+              onSelect: onSelectNode, // Pass function to nodes
+          },
+      }))}
       >
         <div
           style={{
@@ -245,6 +308,7 @@ const WorkFlowInner = () => {
             margin: "20px",
           }}
         >
+          {selectedNode && <ConfigPanel node={selectedNode} onClose={() => setSelectedNode(null)} />}
           <CustomButton
             onClick={() => navigate(-1)}
             children="< - Go Back"
@@ -253,9 +317,10 @@ const WorkFlowInner = () => {
           <TextField
             hiddenLabel
             id="filled-hidden-label-small"
-            defaultValue="Untitled"
             size="small"
             variant="filled"
+            value={fileName}
+            onInput={(e) => setFileName(e.target.value)}
             sx={{
               "& .MuiInputBase-root": { border: "none" },
               "& .MuiFilledInput-root": {

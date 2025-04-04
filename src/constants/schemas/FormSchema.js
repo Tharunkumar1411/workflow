@@ -35,3 +35,17 @@ export const SIGNUP_DETAILS = {
     ),
   }),
 };
+
+export const validationApiSchema = object({
+  method: string().required("Method is required"),
+  url: string().url("Invalid URL format").required("URL is required"),
+});
+
+export const validationEmailSchema = object({
+  email: string().required("Required").email("Invalid Email").nullable(),
+});
+
+export const validationTextSchema = object({
+  text: string().required("Required").nullable(),
+});
+

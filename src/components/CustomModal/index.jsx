@@ -2,7 +2,6 @@ import { Box, Modal, Typography, Button } from "@mui/material";
 import React from "react";
 import CustomButton from "../CustomButton";
 import styles from "./styles.module.scss";
-import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
     position: 'absolute',
@@ -31,7 +30,7 @@ const CustomModal = ({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <CloseIcon />
+        {/* <CloseIcon /> */}
         <Typography id="modal-modal-title" variant="h6" component="h2" className={styles.header}>
           {header}
         </Typography>
