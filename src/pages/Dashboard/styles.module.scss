@@ -1,0 +1,43 @@
+@import "../../styles/mixins.scss";
+
+.rootContainer{
+    background-color: #FFFAF2;
+    padding: 40px;
+    height: 100vh;
+
+    .header{
+        font-family: "PoppingBold";
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 100%;
+        letter-spacing: 0%;
+    }
+
+    .actionContainer{
+        @include flexRow;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        gap: 20px;
+
+        .profileContainer{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        @media screen and (max-width: 768px) {
+            @include flexCol;
+        }
+        .input{
+            width: 340px;
+            height: 32px;
+        }
+    }
+
+    .dataContainer{
+        margin-top: 40px;
+    }
+}

@@ -1,0 +1,43 @@
+.rootContainer{
+    position: "relative";
+    text-align: "center";
+   
+
+    .label {
+        background: white;
+        color: black;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        min-width: 120px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+
+        .iconBtn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #f44336;
+        }
+    }
+
+
+    .addIconContainer{
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: pointer;
+
+        .addIcon{
+            background: white;
+            border: 1px solid #ccc;
+            width: 24px;
+            height: 24px;
+        }
+    }
+}
