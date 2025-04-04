@@ -138,7 +138,6 @@ export default function DataTable({ searchInput }) {
                                 <Divider sx={{ color: "#EE3425" }}>●</Divider>
                                 <span>{detail.time}</span>
                                 <CustomButton
-                                  onClick={() => notifyUnderDev()}
                                   children={detail.status}
                                   sx={{
                                     backgroundColor: detail.status === "Passed" ? "#DDEBC0" : "#F8AEA8",
@@ -149,7 +148,7 @@ export default function DataTable({ searchInput }) {
                                     height: "22px"
                                   }}
                                 />
-                                <LaunchIcon />
+                                  <LaunchIcon  onClick={() => notifyUnderDev()}/>
                               </Box>
                             ))}
                           </Box>

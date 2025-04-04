@@ -57,7 +57,7 @@ export default function DraggableRow({ row, togglePin,expandedRows, setExpandedR
           <CustomButton children="Edit"  sx={DASHBOARD_ACTION_BTN_STYLE} onClick={() => hanldeEdit(row.flowId)}/>
 
           <IconButton size="small">
-            <MoreVert />
+            <MoreVert  onClick={() => notifyUnderDev()}/>
           </IconButton>
 
           <IconButton size="small" onClick={() => toggleExpand(row.id)}>
