@@ -8,7 +8,7 @@ import GoogleImg from "../../assets/images/GoogleIcon.svg"
 import AppleImg from "../../assets/images/AppleIcon.svg"
 import FbImg from "../../assets/images/FaceBookIcon.svg"
 import { useNavigate } from "react-router";
-import { notify } from "../../helpers/Utils";
+import { notifyUnderDev } from "../../helpers/Utils";
 import useAuthStore from "../../store/Auth";
 import { LoginAuth } from "../../helpers/auth";
 import { PAGES_ROUTES } from "../../AppRoute/routes";
@@ -119,7 +119,7 @@ export default function LoginCard () {
                                         />
                                     } 
                                     label="Remember Me" />
-                                <Typography onClick={() => notify("Under Development")}>Forget Password ?</Typography>
+                                <Typography onClick={() => notifyUnderDev()}>Forget Password ?</Typography>
                             </FormControl>
 
                             <div className={styles.loginBtn} onClick={!loading ? handleSubmit : null}>
@@ -132,9 +132,9 @@ export default function LoginCard () {
             <Divider className={styles.orContainer}>Or</Divider>
             
             <div>
-                <CustomButton onClick={() => notify("Under Development")} children="Login with Google" icon={<img src={GoogleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
-                <CustomButton onClick={() => notify("Under Development")} children="Login with Facebook" icon={<img src={AppleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
-                <CustomButton onClick={() => notify("Under Development")} children="Login with Apple" icon={<img src={FbImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
+                <CustomButton onClick={() => notifyUnderDev()} children="Login with Google" icon={<img src={GoogleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
+                <CustomButton onClick={() => notifyUnderDev()} children="Login with Facebook" icon={<img src={AppleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
+                <CustomButton onClick={() => notifyUnderDev()} children="Login with Apple" icon={<img src={FbImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
             </div>
             
             <Typography className={styles.signupTxt}>New User? <span className={styles.span} onClick={() =>  setUserIn("Signup")}>SIGN IN HERE</span></Typography>

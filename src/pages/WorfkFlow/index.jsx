@@ -22,7 +22,7 @@ import { useNavigate, useParams } from "react-router";
 import CustomButton from "../../components/CustomButton";
 import ConfigPanel from "../../components/ConfigPanel";
 import useFlowStore from "../../store/Flow";
-import { getCustomTimestamp, getRandom3DigitId, notify, notifyError } from "../../helpers/Utils";
+import { getCustomTimestamp, notify, notifyError } from "../../helpers/Utils";
 import useAuthStore from "../../store/Auth";
 import { saveWorkflowToDB } from "../../api/workflow";
 
@@ -43,8 +43,7 @@ const WorkFlowInner = () => {
   const [selectedNode, setSelectedNode] = useState(null);
 
   const onSelectNode = (id, data) => {
-    console.log("chekcing thiss", data)
-      setSelectedNode({ id, ...data }); // Store node data in state
+      setSelectedNode({ id, ...data });
   };
 
   const { id } = useParams();
@@ -53,20 +52,20 @@ const WorkFlowInner = () => {
   const [idCounter, setIdCounter] = useState(3);
   const { zoomIn, zoomOut, setViewport, getZoom } = useReactFlow();
   const [zoomLevel, setZoomLevel] = useState(getZoom());
-  const {getFlow, setFlow} = useFlowStore(state => state);
-  const [fileName, setFileName] = useState(getFlow(id)?.flowName ?? "Untitled")
+  const { apiModalData, getFlowWithId, setFlow, flows} = useFlowStore(state => state);
+  const [fileName, setFileName] = useState(getFlowWithId(id)?.flowName ?? "Untitled")
   const [history, setHistory] = useState({
     past: [],
     present: { nodes, edges },
     future: [],
   });
-  const { apiModalData } = useFlowStore();
   const {displayName} = useAuthStore(state => state.authDetails)
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      const savedFlow = getFlow(id);
+      const savedFlow = getFlowWithId(id);
+      console.log("savedFlow", flows)
       if (savedFlow) {
         setNodes(savedFlow.nodes);
         setEdges(savedFlow.edges);
@@ -77,7 +76,7 @@ const WorkFlowInner = () => {
         });
       }
     }
-  }, [getFlow, id, setEdges, setNodes]);
+  }, [getFlowWithId, id, setEdges, setNodes]);
 
   // History management functions
   const saveToHistory = useCallback(() => {
@@ -262,10 +261,9 @@ const WorkFlowInner = () => {
     }
 
     const editedOn = getCustomTimestamp()
-    const randomId = getRandom3DigitId()
 
     const flowData = {
-      flowId: randomId,
+      flowId: id,
       nodes,
       edges,
       flowName: fileName,
@@ -274,17 +272,16 @@ const WorkFlowInner = () => {
       description : "Some description here regarding the flow..",
       apiConfig: apiModalData || null
     };
-  
+
     try {
       await saveWorkflowToDB(flowData);
-      alert("Workflow saved successfully!");
+      notify("Flow saved to store!");
     } catch (err) {
       console.error("Error saving workflow:", err);
-      alert("Something went wrong while saving the workflow.");
+      notifyError("Flow saved to store!");
     }
   
     setFlow(id, flowData);
-    notify("Flow saved to store!");
   };
 
   return (

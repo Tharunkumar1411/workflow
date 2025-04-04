@@ -8,11 +8,11 @@ const useFlowStore = create(
       apiModalData: {},
       savedWorkflows: [],
       setApiModalData: (data) => set({ apiModalData: data }),
-      setFlow: (name, data) =>
+      setFlow: (id, data) =>
         set((state) => ({
           flows: {
             ...state.flows,
-            [name]: data,
+            [id]: data,
           },
         })),
 
@@ -21,7 +21,7 @@ const useFlowStore = create(
             savedWorkflows: [...state.savedWorkflows, workflow],
           })),
 
-        getFlow: (id) => {
+        getFlowWithId: (id) => {
             const state = useFlowStore.getState();
             return state.flows[id] || null;
         },

@@ -10,8 +10,11 @@ import CustomButton from "../CustomButton";
 import DraggableRow from "../DragableRow";
 import { StyledTableCell } from "../../helpers/MuiElements";
 import LaunchIcon from '@mui/icons-material/Launch';
-import { transformApiData } from "../../helpers/Utils";
+import { notifyUnderDev, transformApiData } from "../../helpers/Utils";
 import { getWorkflow } from "../../api/workflow";
+import { useNavigate } from "react-router";
+import { PAGES_ROUTES } from "../../AppRoute/routes"
+import useFlowStore from "../../store/Flow";
 
 export default function DataTable({ searchInput }) {
   const [rows, setRows] = React.useState([]);
@@ -19,6 +22,8 @@ export default function DataTable({ searchInput }) {
   const [page, setPage] = React.useState(1);
   const [expandedRows, setExpandedRows] = React.useState({});
   const rowsPerPage = 10;
+  const navigate = useNavigate();
+  const {saveWorkflow} = useFlowStore(state => state);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
@@ -33,6 +38,7 @@ export default function DataTable({ searchInput }) {
         const formatted = transformApiData(response);
         setApiData(formatted);
         setRows(formatted);
+        saveWorkflow(formatted)
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -80,6 +86,10 @@ export default function DataTable({ searchInput }) {
 
   const paginatedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
+  const hanldeEdit = (id) => {
+    navigate(`${PAGES_ROUTES.WORKFLOW}/${id}`)
+  }
+
   return (
     <TableContainer component={Paper} sx={{ padding: "20px" }}>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -102,6 +112,7 @@ export default function DataTable({ searchInput }) {
                     togglePin={togglePin}
                     expandedRows={expandedRows}
                     setExpandedRows={setExpandedRows}
+                    hanldeEdit={hanldeEdit}
                   />
                   <TableRow sx={{ backgroundColor: "#FFF7F0" }}>
                     <TableCell colSpan={5} sx={{ padding: 0 }}>
@@ -109,9 +120,10 @@ export default function DataTable({ searchInput }) {
                         <Box sx={{ backgroundColor: "#FFF7F0", padding: "10px", borderRadius: "5px" }}>
                           {row.details?.map((detail, index) => (
                             <Box key={index} display="flex" alignItems="center" gap={2} sx={{ marginBottom: "5px" }}>
-                              <Divider sx={{ color: "#000" }}>●</Divider>
+                              <Divider sx={{ color: "#EE3425" }}>●</Divider>
                               <span>{detail.time}</span>
                               <CustomButton
+                                onClick={() => notifyUnderDev()}
                                 children={detail.status}
                                 sx={{
                                   backgroundColor: detail.status === "Passed" ? "#DDEBC0" : "#F8AEA8",
@@ -144,6 +156,7 @@ export default function DataTable({ searchInput }) {
           onChange={handleChangePage}
         />
       </Box>
+      
     </TableContainer>
   );
 }

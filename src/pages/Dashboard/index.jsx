@@ -9,6 +9,7 @@ import { useNavigate } from "react-router";
 import { PAGES_ROUTES } from "../../AppRoute/routes";
 import LogoutIcon from '@mui/icons-material/Logout';
 import CustomModal from "../../components/CustomModal";
+import { getRandom3DigitId } from "../../helpers/Utils";
 
 const Dashboard = () => {
     const [serchInput, setSearchInput] = useState("");
@@ -67,7 +68,7 @@ const Dashboard = () => {
                     }
                 />
 
-                <CustomButton onClick={() => navigate(`${PAGES_ROUTES.WORKFLOW}/123`)} children="+ Create New Process"  sx={{backgroundColor:"#000", color: "#fff", width:"fit-content", height: "32px"}}/>
+                <CustomButton onClick={() => navigate(`${PAGES_ROUTES.WORKFLOW}/${getRandom3DigitId()}`)} children="+ Create New Process"  sx={{backgroundColor:"#000", color: "#fff", width:"fit-content", height: "32px"}}/>
             </div>
             
             <div className={styles.dataContainer}>
