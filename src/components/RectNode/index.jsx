@@ -1,60 +1,28 @@
 import { Add, Delete } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { Handle, Position } from "reactflow";
+import styles from "./styles.module.scss";
 
 export const RectNode = ({ id, data }) => {
   return (
-    <div style={{ position: "relative", textAlign: "center" }}>
-      <div
-        style={{
-          background: "white",
-          color: "black",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-          padding: "10px 20px",
-          minWidth: 120,
-          minHeight: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-        }}
-      >
+    <div className={styles.rootContainer}>
+      <div className={styles.label}>
         {data.label}
 
         <IconButton
-          size="small"
-          style={{
-            position: "absolute",
-            right: 5,
-            top: "50%",
-            transform: "translateY(-50%)",
-            color: "#f44336"
-          }}
-          onClick={() => data.onDelete && data.onDelete(id)}
+            className={styles.iconBtn}
+            size="small"
+            onClick={() => data.onDelete && data.onDelete(id)}
         >
           <Delete fontSize="small" />
         </IconButton>
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-30px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          cursor: "pointer",
-        }}
-      >
+      <div className={styles.addIconContainer}>
         <IconButton
           size="small"
           onClick={(event) => data.onAdd && data.onAdd(event, id)}
-          style={{
-            background: "white",
-            border: "1px solid #ccc",
-            width: 24,
-            height: 24,
-          }}
+          className={styles.addIcon}
         >
           <Add fontSize="small" />
         </IconButton>
