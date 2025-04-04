@@ -15,8 +15,7 @@ const TextboxModal = ({ onClose }) => {
             <Formik
                 initialValues={{ method: "", url: "", headers: "", body: "" }}
                 validationSchema={validationTextSchema}
-                onSubmit={(values) => {
-                    console.log("Submitted Data:", values);
+                onSubmit={() => {
                     onClose();
                 }}
             >

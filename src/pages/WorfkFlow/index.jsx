@@ -52,7 +52,7 @@ const WorkFlowInner = () => {
   const [idCounter, setIdCounter] = useState(3);
   const { zoomIn, zoomOut, setViewport, getZoom } = useReactFlow();
   const [zoomLevel, setZoomLevel] = useState(getZoom());
-  const { apiModalData, getFlowWithId, setFlow, flows} = useFlowStore(state => state);
+  const { apiModalData, getFlowWithId, setFlow} = useFlowStore(state => state);
   const [fileName, setFileName] = useState(getFlowWithId(id)?.flowName ?? "Untitled")
   const [history, setHistory] = useState({
     past: [],
@@ -65,7 +65,6 @@ const WorkFlowInner = () => {
   useEffect(() => {
     if (id) {
       const savedFlow = getFlowWithId(id);
-      console.log("savedFlow", flows)
       if (savedFlow) {
         setNodes(savedFlow.nodes);
         setEdges(savedFlow.edges);
@@ -254,7 +253,7 @@ const WorkFlowInner = () => {
       notifyError("No flow name specified in URL.");
       return;
     }
-    console.log("filename:", fileName)
+
     if(fileName === "Untitled" || fileName === "") {
       notifyError("Give proper File name");
       return;

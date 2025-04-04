@@ -26,7 +26,6 @@ export function createData(id, name, flowName, flowId, editedOn, description, de
 }
 
 export const transformApiData = (data) => {
-    console.log("data check:", data)
     return data?.map((item, index) =>
       createData(
         String(index + 1),

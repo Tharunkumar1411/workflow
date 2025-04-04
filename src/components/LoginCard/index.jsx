@@ -24,7 +24,6 @@ export default function LoginCard () {
 
         try {
             const userDetails = await LoginAuth(values.email, values.password);
-            console.log("user detal:", userDetails)
             const {email, accessToken, displayName} = userDetails.user;
             setAuthDetails({email, accessToken, displayName});
             navigage(PAGES_ROUTES.DASHBOARD);

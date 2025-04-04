@@ -20,8 +20,7 @@ const ApiModal = ({ onClose }) => {
             <Formik
                 initialValues={{ method: "", url: "", headers: "", body: "" }}
                 validationSchema={validationApiSchema}
-                onSubmit={(values) => {
-                    console.log("Submitted Data:", values);
+                onSubmit={() => {
                     onClose();
                 }}
             >
