@@ -1,12 +1,95 @@
-# React + Vite
+# 🧩 Workflow Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack application to manage, visualize, and edit workflows with advanced drag-and-drop reordering, dynamic row expansion, and MongoDB integration.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✅ Frontend
+- Built with **React.js** and **MUI (Material UI)**
+- Uses **DndKit** for drag-and-drop sorting of table rows
+- Paginated, collapsible **data table**
+- Dynamic row expansion to show detailed workflow steps
+- Integrated with backend API to fetch and update workflows
+- Search functionality to filter workflows by name or ID
+- Highlights "pinned" workflows by moving them to the top
 
-## Expanding the ESLint configuration
+### ⚙️ Backend
+- **Node.js + Express** server
+- **MongoDB + Mongoose** for data persistence
+- API routes to save and fetch workflow data
+- Smart **upsert logic** to update existing workflows if `flowId` already exists, else create a new one
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🗂️ Tech Stack
+
+**Frontend**  
+- React.js  
+- Zustand (for state management)  
+- Material UI (MUI)  
+- DndKit  
+- Axios
+
+**Backend**  
+- Node.js  
+- Express.js  
+- MongoDB  
+- Mongoose
+
+---
+
+## 🧪 Example Workflow Schema
+
+```js
+const workflowSchema = new mongoose.Schema({
+  flowId: String,
+  flowName: String,
+  name: String, // User display name
+  editedOn: String,
+  description: String,
+  nodes: Array,
+  edges: Array,
+  apiConfig: Object,
+}, { timestamps: true });
+```
+
+---
+
+## 📦 API Endpoints
+
+### `POST /api/setWorkflow`
+Saves or updates a workflow.
+
+### `GET /api/getWorkflows`
+Fetches all workflows for rendering in the frontend.
+
+---
+
+## 📌 Setup Instructions
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/Tharunkumar1411/workflow
+   cd workflow-dashboard
+   ```
+
+2. **Install dependencies**
+   - For frontend:
+     ```bash
+     cd client
+     npm install
+     npm start
+     ```
+   - For backend:
+     ```bash
+     cd server
+     npm install
+     npm run dev
+     ```
+
+3. **Configure environment variables**
+   - Create a `.env` file in `server/`:
+     ```
+     MONGODB_URI=your_mongo_connection_string
+     PORT=5000
+     ```
