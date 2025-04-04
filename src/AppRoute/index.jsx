@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router"
 import { PAGES_ROUTES } from "./routes";
 import { lazy, Suspense } from "react";
 import PrivateLayout from "./PrivateLayout";
+import Loader from "../components/Loader";
 
 const AuthPage = lazy(() => import("../pages/Login"));
 const DashboardPage = lazy(() => import("../pages/Dashboard"))
@@ -9,7 +10,7 @@ const WorkFlowPage = lazy(() => import("../pages/WorfkFlow"))
 
 const AppRoute = () => {
     return(
-        <Suspense fallback={<>Loading...</>}>
+        <Suspense fallback={<Loader />}>
             <Routes>
                 <Route path={PAGES_ROUTES.LOGIN} element={<AuthPage />}/>
 
