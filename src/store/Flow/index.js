@@ -5,6 +5,9 @@ const useFlowStore = create(
   persist(
     (set) => ({
       flows: {},
+      apiModalData: {},
+      savedWorkflows: [],
+      setApiModalData: (data) => set({ apiModalData: data }),
       setFlow: (name, data) =>
         set((state) => ({
           flows: {
@@ -12,6 +15,11 @@ const useFlowStore = create(
             [name]: data,
           },
         })),
+
+        saveWorkflow: (workflow) =>
+          set((state) => ({
+            savedWorkflows: [...state.savedWorkflows, workflow],
+          })),
 
         getFlow: (id) => {
             const state = useFlowStore.getState();

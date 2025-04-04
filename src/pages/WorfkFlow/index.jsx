@@ -24,6 +24,7 @@ import ConfigPanel from "../../components/ConfigPanel";
 import useFlowStore from "../../store/Flow";
 import { getCustomTimestamp, getRandom3DigitId, notify, notifyError } from "../../helpers/Utils";
 import useAuthStore from "../../store/Auth";
+import { saveWorkflowToDB } from "../../api/workflow";
 
 const nodeTypes = {
   circle: CircleNode,
@@ -53,12 +54,13 @@ const WorkFlowInner = () => {
   const { zoomIn, zoomOut, setViewport, getZoom } = useReactFlow();
   const [zoomLevel, setZoomLevel] = useState(getZoom());
   const {getFlow, setFlow} = useFlowStore(state => state);
-  const [fileName, setFileName] = useState("Untitled")
+  const [fileName, setFileName] = useState(getFlow(id)?.flowName ?? "Untitled")
   const [history, setHistory] = useState({
     past: [],
     present: { nodes, edges },
     future: [],
   });
+  const { apiModalData } = useFlowStore();
   const {displayName} = useAuthStore(state => state.authDetails)
   const navigate = useNavigate();
 
@@ -248,7 +250,7 @@ const WorkFlowInner = () => {
     handleClose();
   }
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!id) {
       notifyError("No flow name specified in URL.");
       return;
@@ -269,8 +271,17 @@ const WorkFlowInner = () => {
       flowName: fileName,
       editedOn,
       name: displayName,
-      description : "Some description here regarding the flow.."
+      description : "Some description here regarding the flow..",
+      apiConfig: apiModalData || null
     };
+  
+    try {
+      await saveWorkflowToDB(flowData);
+      alert("Workflow saved successfully!");
+    } catch (err) {
+      console.error("Error saving workflow:", err);
+      alert("Something went wrong while saving the workflow.");
+    }
   
     setFlow(id, flowData);
     notify("Flow saved to store!");
@@ -309,11 +320,13 @@ const WorkFlowInner = () => {
           }}
         >
           {selectedNode && <ConfigPanel node={selectedNode} onClose={() => setSelectedNode(null)} />}
+
           <CustomButton
             onClick={() => navigate(-1)}
             children="< - Go Back"
             sx={{ border: "none", color: "#000", textDecoration: "underline", fontWeight: "bold" }}
           />
+
           <TextField
             hiddenLabel
             id="filled-hidden-label-small"
@@ -329,6 +342,7 @@ const WorkFlowInner = () => {
               },
             }}
           />
+
           <IconButton style={{ marginLeft: 8, color: "#FBDC00" }} onClick={handleSave}>
             <Description />
           </IconButton>

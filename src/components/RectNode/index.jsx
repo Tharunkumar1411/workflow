@@ -27,9 +27,9 @@ export const RectNode = ({ id, data }) => {
 
         <div className={styles.addIconContainer}>
             <IconButton
-            size="small"
-            onClick={(event) => data.onAdd && data.onAdd(event, id)}
-            className={styles.addIcon}
+                size="small"
+                onClick={(event) => data.onAdd && data.onAdd(event, id)}
+                className={styles.addIcon}
             >
             <Add fontSize="small" />
             </IconButton>

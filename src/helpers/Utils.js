@@ -20,4 +20,27 @@ export function getCustomTimestamp() {
 export function getRandom3DigitId() {
     return Math.floor(100 + Math.random() * 900).toString();
 }
+export function createData(id, name, flowName, flowId, editedOn, description, details) {
+    return { id, name, flowName, flowId, editedOn, description, details, pinned: false };
+}
+
+export const transformApiData = (data) => {
+    console.log("data check:", data)
+    return data?.map((item, index) =>
+      createData(
+        String(index + 1),
+        item.name,
+        item.flowName ?? "Workflow Name here",
+        item.flowId,
+        `${item.name} | ${new Date(item.updatedAt).toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        })}`,
+        `Workflow with ${item.nodes.length} nodes and ${item.edges.length} edges.`,
+        item.edges.map((edge, idx) => ({
+          time: new Date(item.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+          status: idx % 2 === 0 ? "Passed" : "Failed"
+        }))
+      )
+    );
+};
   
