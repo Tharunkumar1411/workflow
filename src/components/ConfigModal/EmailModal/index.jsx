@@ -15,8 +15,7 @@ const EmailModal = ({ onClose }) => {
             <Formik
                 initialValues={{ method: "", url: "", headers: "", body: "" }}
                 validationSchema={validationEmailSchema}
-                onSubmit={(values) => {
-                    console.log("Submitted Data:", values);
+                onSubmit={() => {
                     onClose();
                 }}
             >

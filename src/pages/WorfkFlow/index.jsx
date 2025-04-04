@@ -22,8 +22,9 @@ import { useNavigate, useParams } from "react-router";
 import CustomButton from "../../components/CustomButton";
 import ConfigPanel from "../../components/ConfigPanel";
 import useFlowStore from "../../store/Flow";
-import { getCustomTimestamp, getRandom3DigitId, notify, notifyError } from "../../helpers/Utils";
+import { getCustomTimestamp, notify, notifyError } from "../../helpers/Utils";
 import useAuthStore from "../../store/Auth";
+import { saveWorkflowToDB } from "../../api/workflow";
 
 const nodeTypes = {
   circle: CircleNode,
@@ -42,8 +43,7 @@ const WorkFlowInner = () => {
   const [selectedNode, setSelectedNode] = useState(null);
 
   const onSelectNode = (id, data) => {
-    console.log("chekcing thiss", data)
-      setSelectedNode({ id, ...data }); // Store node data in state
+      setSelectedNode({ id, ...data });
   };
 
   const { id } = useParams();
@@ -52,8 +52,8 @@ const WorkFlowInner = () => {
   const [idCounter, setIdCounter] = useState(3);
   const { zoomIn, zoomOut, setViewport, getZoom } = useReactFlow();
   const [zoomLevel, setZoomLevel] = useState(getZoom());
-  const {getFlow, setFlow} = useFlowStore(state => state);
-  const [fileName, setFileName] = useState("Untitled")
+  const { apiModalData, getFlowWithId, setFlow} = useFlowStore(state => state);
+  const [fileName, setFileName] = useState(getFlowWithId(id)?.flowName ?? "Untitled")
   const [history, setHistory] = useState({
     past: [],
     present: { nodes, edges },
@@ -64,7 +64,7 @@ const WorkFlowInner = () => {
 
   useEffect(() => {
     if (id) {
-      const savedFlow = getFlow(id);
+      const savedFlow = getFlowWithId(id);
       if (savedFlow) {
         setNodes(savedFlow.nodes);
         setEdges(savedFlow.edges);
@@ -75,7 +75,7 @@ const WorkFlowInner = () => {
         });
       }
     }
-  }, [getFlow, id, setEdges, setNodes]);
+  }, [getFlowWithId, id, setEdges, setNodes]);
 
   // History management functions
   const saveToHistory = useCallback(() => {
@@ -248,32 +248,39 @@ const WorkFlowInner = () => {
     handleClose();
   }
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!id) {
       notifyError("No flow name specified in URL.");
       return;
     }
-    console.log("filename:", fileName)
+
     if(fileName === "Untitled" || fileName === "") {
       notifyError("Give proper File name");
       return;
     }
 
     const editedOn = getCustomTimestamp()
-    const randomId = getRandom3DigitId()
 
     const flowData = {
-      flowId: randomId,
+      flowId: id,
       nodes,
       edges,
       flowName: fileName,
       editedOn,
       name: displayName,
-      description : "Some description here regarding the flow.."
+      description : "Some description here regarding the flow..",
+      apiConfig: apiModalData || null
     };
+
+    try {
+      await saveWorkflowToDB(flowData);
+      notify("Flow saved to store!");
+    } catch (err) {
+      console.error("Error saving workflow:", err);
+      notifyError("Flow saved to store!");
+    }
   
     setFlow(id, flowData);
-    notify("Flow saved to store!");
   };
 
   return (
@@ -309,11 +316,13 @@ const WorkFlowInner = () => {
           }}
         >
           {selectedNode && <ConfigPanel node={selectedNode} onClose={() => setSelectedNode(null)} />}
+
           <CustomButton
             onClick={() => navigate(-1)}
             children="< - Go Back"
             sx={{ border: "none", color: "#000", textDecoration: "underline", fontWeight: "bold" }}
           />
+
           <TextField
             hiddenLabel
             id="filled-hidden-label-small"
@@ -329,6 +338,7 @@ const WorkFlowInner = () => {
               },
             }}
           />
+
           <IconButton style={{ marginLeft: 8, color: "#FBDC00" }} onClick={handleSave}>
             <Description />
           </IconButton>

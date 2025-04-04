@@ -7,7 +7,7 @@ import CustomButton from "../CustomButton";
 import GoogleImg from "../../assets/images/GoogleIcon.svg"
 import { SigninAuth } from "../../helpers/auth";
 import { useNavigate } from "react-router";
-import { notify, notifyError } from "../../helpers/Utils";
+import { notifyError, notifyUnderDev } from "../../helpers/Utils";
 import useAuthStore from "../../store/Auth";
 import { PAGES_ROUTES } from "../../AppRoute/routes";
 
@@ -184,7 +184,7 @@ export default function SignupCard () {
             <Divider className={styles.orContainer}>Or</Divider>
             
             <div>
-                <CustomButton onClick={() => notify("Under Development")} children="Login with Google" icon={<img src={GoogleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
+                <CustomButton onClick={() => notifyUnderDev()} children="Login with Google" icon={<img src={GoogleImg} height="18px"/>}  sx={{backgroundColor:"#fff", color: "#616161", width:"100%", marginTop:"15px", padding: "5px"}}/>
             </div>
             
             <Typography className={styles.signupTxt} onClick={() => setUserIn("Login")}>Already Have an Account? <span className={styles.span}>LOG IN HERE</span></Typography>

@@ -4,7 +4,6 @@ import TextboxModal from "../ConfigModal/TextboxModal";
 import EmailModal from "../ConfigModal/EmailModal";
 
 const ConfigPanel = ({ node, onClose }) => {
-
     const getResprctiveModal = () => {
         switch (node.label) {
             case "API Call":
