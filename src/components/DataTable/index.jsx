@@ -1,7 +1,9 @@
 import * as React from "react";
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  Box, Collapse, Divider, Pagination
+  Box, Collapse, Divider, Pagination,
+  CircularProgress,
+  Typography
 } from "@mui/material";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -24,6 +26,8 @@ export default function DataTable({ searchInput }) {
   const rowsPerPage = 10;
   const navigate = useNavigate();
   const {saveWorkflow} = useFlowStore(state => state);
+  const [loading, setLoading] = React.useState(true);
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
@@ -34,6 +38,7 @@ export default function DataTable({ searchInput }) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true); 
         const response = await getWorkflow();
         const formatted = transformApiData(response);
         setApiData(formatted);
@@ -41,6 +46,8 @@ export default function DataTable({ searchInput }) {
         saveWorkflow(formatted)
       } catch (error) {
         console.error("Failed to fetch data:", error);
+      } finally {
+        setLoading(false); // End loader
       }
     };
     fetchData();
@@ -92,70 +99,82 @@ export default function DataTable({ searchInput }) {
 
   return (
     <TableContainer component={Paper} sx={{ padding: "20px" }}>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={rows?.map(row => row.id)} strategy={verticalListSortingStrategy}>
-          <Table aria-label="workflow table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell align="left">Workflow Name</StyledTableCell>
-                <StyledTableCell align="left">ID</StyledTableCell>
-                <StyledTableCell align="left">Last Edited On</StyledTableCell>
-                <StyledTableCell align="left">Description</StyledTableCell>
-                <StyledTableCell align="left">Actions</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedRows?.map(row => (
-                <React.Fragment key={row.id}>
-                  <DraggableRow
-                    row={row}
-                    togglePin={togglePin}
-                    expandedRows={expandedRows}
-                    setExpandedRows={setExpandedRows}
-                    hanldeEdit={hanldeEdit}
-                  />
-                  <TableRow sx={{ backgroundColor: "#FFF7F0" }}>
-                    <TableCell colSpan={5} sx={{ padding: 0 }}>
-                      <Collapse in={expandedRows[row.id]} timeout="auto" unmountOnExit>
-                        <Box sx={{ backgroundColor: "#FFF7F0", padding: "10px", borderRadius: "5px" }}>
-                          {row.details?.map((detail, index) => (
-                            <Box key={index} display="flex" alignItems="center" gap={2} sx={{ marginBottom: "5px" }}>
-                              <Divider sx={{ color: "#EE3425" }}>●</Divider>
-                              <span>{detail.time}</span>
-                              <CustomButton
-                                onClick={() => notifyUnderDev()}
-                                children={detail.status}
-                                sx={{
-                                  backgroundColor: detail.status === "Passed" ? "#DDEBC0" : "#F8AEA8",
-                                  color: "#000",
-                                  fontSize: "12px",
-                                  width: "52px",
-                                  borderRadius: "2px",
-                                  height: "22px"
-                                }}
-                              />
-                              <LaunchIcon />
-                            </Box>
-                          ))}
-                        </Box>
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </SortableContext>
-      </DndContext>
+
+    {loading ? (
+      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="300px">
+        <CircularProgress />
+        <Typography variant="body2" mt={2}>Loading workflows...</Typography>
+      </Box>
+    ) : (
+      <>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={rows?.map(row => row.id)} strategy={verticalListSortingStrategy}>
+            <Table aria-label="workflow table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="left">Workflow Name</StyledTableCell>
+                  <StyledTableCell align="left">ID</StyledTableCell>
+                  <StyledTableCell align="left">Last Edited On</StyledTableCell>
+                  <StyledTableCell align="left">Description</StyledTableCell>
+                  <StyledTableCell align="left">Actions</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedRows?.map(row => (
+                  <React.Fragment key={row.id}>
+                    <DraggableRow
+                      row={row}
+                      togglePin={togglePin}
+                      expandedRows={expandedRows}
+                      setExpandedRows={setExpandedRows}
+                      hanldeEdit={hanldeEdit}
+                    />
+                    <TableRow sx={{ backgroundColor: "#FFF7F0" }}>
+                      <TableCell colSpan={5} sx={{ padding: 0 }}>
+                        <Collapse in={expandedRows[row.id]} timeout="auto" unmountOnExit>
+                          <Box sx={{ backgroundColor: "#FFF7F0", padding: "10px", borderRadius: "5px" }}>
+                            {row.details?.map((detail, index) => (
+                              <Box key={index} display="flex" alignItems="center" gap={2} sx={{ marginBottom: "5px" }}>
+                                <Divider sx={{ color: "#EE3425" }}>●</Divider>
+                                <span>{detail.time}</span>
+                                <CustomButton
+                                  onClick={() => notifyUnderDev()}
+                                  children={detail.status}
+                                  sx={{
+                                    backgroundColor: detail.status === "Passed" ? "#DDEBC0" : "#F8AEA8",
+                                    color: "#000",
+                                    fontSize: "12px",
+                                    width: "52px",
+                                    borderRadius: "2px",
+                                    height: "22px"
+                                  }}
+                                />
+                                <LaunchIcon />
+                              </Box>
+                            ))}
+                          </Box>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                ))}
+              </TableBody>
+            </Table>
+          </SortableContext>
+        </DndContext>
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Pagination
+            count={Math.ceil(rows.length / rowsPerPage)}
+            page={page}
+            onChange={handleChangePage}
+          />
+        </Box>
+      </>
+    )}
+    
 
       {/* Pagination */}
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Pagination
-          count={Math.ceil(rows.length / rowsPerPage)}
-          page={page}
-          onChange={handleChangePage}
-        />
-      </Box>
+    
       
     </TableContainer>
   );
